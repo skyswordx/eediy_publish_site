@@ -2,12 +2,18 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 const root = process.cwd()
+const envCandidate = process.env.PUBLIC_CONTENT_DIR
+  ? path.resolve(root, process.env.PUBLIC_CONTENT_DIR)
+  : null
+
 const candidates = [
+  envCandidate,
+  path.resolve(root, './_external/eediy_public_content'),
   path.resolve(root, '../eediy_public_content'),
   path.resolve(root, '../public_content'),
   path.resolve(root, '../../eediy_public_content'),
   path.resolve(root, '../modules/public_content')
-]
+].filter(Boolean)
 
 const sourceDir = candidates.find((dir) => fs.existsSync(dir))
 
