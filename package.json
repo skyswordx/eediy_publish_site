@@ -1,0 +1,13 @@
+{
+  "name": "eediy_publish_site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync": "node ./scripts/sync_public_content.mjs",
+    "ensure:runtime": "node ./scripts/ensure_vitepress_runtime.mjs",
+    "docs:dev": "node ./scripts/run_vitepress.mjs dev",
+    "docs:build": "node ./scripts/run_vitepress.mjs build",
+    "docs:preview": "node ./scripts/run_vitepress.mjs preview"
+  }
+}
