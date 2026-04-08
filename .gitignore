@@ -1,6 +1,9 @@
 node_modules/
-dist/
-.vitepress/dist/
-.vitepress/cache/
+public/
+.quartz-cache/
+content/*
+!content/.gitkeep
+_external/
 docs/
 *.log
+tsconfig.tsbuildinfo

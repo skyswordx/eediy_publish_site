@@ -2,93 +2,79 @@
 
 ## 当前状态
 
-- `skyswordx/eediy_publish_site` 已启用 GitHub Pages
-- 发布模式为 `workflow`
-- 自定义域名 `www.circlemoon.top` 已绑定到当前仓
-- 旧 `skyswordx.github.io` 已解除 `www.circlemoon.top` 绑定
-- 最近一次完整部署链路已成功跑通
+- 仓库：`skyswordx/eediy_publish_site`
+- 发布框架：Quartz 4
+- 发布模式：GitHub Pages `workflow`
+- 内容来源：`eediy_public_content`
+- 自定义域名：`www.circlemoon.top`
 
 ## 当前发布链路
 
 1. checkout `eediy_publish_site`
 2. checkout `eediy_public_content`
-3. 安装站点依赖
-4. 补装 Linux runner 需要的 Rollup 原生包
-5. 同步公开内容到 `docs/`
-6. 构建 VitePress 站点
+3. 安装 Node 22 依赖
+4. 对齐 npm 版本到 `10.9.2`
+5. 用 Quartz 直接读取 `./_external/eediy_public_content`
+6. 构建静态产物到 `public/`
 7. 上传 Pages artifact
 8. 部署到 GitHub Pages
 
-## 首次落地时踩过的坑
+## 关键文件
 
-### 1. Windows 本机把 GitHub 指到了 `127.0.0.1`
+- workflow: `.github/workflows/deploy.yml`
+- Quartz 配置：`quartz.config.ts`
+- Quartz 布局：`quartz.layout.ts`
+- 内容目录解析：`scripts/sync_public_content.mjs`
+- Quartz 启动入口：`scripts/run_quartz.mjs`
 
-排查命令：
+## 首次迁移中踩过的坑
 
-```powershell
-Resolve-DnsName github.com
-Test-NetConnection github.com -Port 443
-Get-Content "C:\Windows\System32\drivers\etc\hosts"
-```
+### 1. Quartz 当前实际上要求更高版本的 Node 22
 
-如果 `github.com` 被第三方工具劫持到 `127.0.0.1`，先解除相关 `hosts` 条目，再刷新 DNS。
+本次本地验证发现：
 
-### 2. `gh auth login` 在不稳定网络下不一定可靠
+- 系统 `Node 22.10.0 + npm 10.9.0` 不足以跑通 Quartz 当前依赖链
+- 便携版 `Node 22.20.0 + npm 10.9.3` 可以正常安装与构建
 
-当前可复用方案是：
+这意味着：
 
-- 让 Git Credential Manager 负责存储 GitHub 凭据
-- 临时从 `git credential fill` 取出 token 注入 `GH_TOKEN`
-- 用 `gh` 完成仓库创建、Actions 查询和 Pages API 调用
+- workflow 里不能只写 “Node 22”，还需要显式对齐 npm
+- 本地如果版本略旧，优先用便携版或版本管理器验证
 
-### 3. HTTPS push 不稳定时，优先走 SSH over 443
+### 2. 不要再复制一份内容到站点仓
 
-推荐在 `~/.ssh/config` 中为 `github.com` 配置：
+Quartz 官方支持 `-d <directory>` 直接指定内容目录。
 
-```sshconfig
-Host github.com
-  HostName ssh.github.com
-  Port 443
-  User git
-  IdentityFile C:\Users\c1rcLEmoon\.ssh\id_rsa
-  IdentitiesOnly yes
-```
+这次升级后不再：
 
-验证命令：
+- 把 `eediy_public_content` 复制到本地 `docs/`
+- 维护第二份发布候选内容镜像
 
-```powershell
-ssh -T github.com
-```
+改为：
 
-### 4. Pages 站点不存在时，`actions/configure-pages` 会直接失败
+- 站点仓直接消费内容仓
+- 保持公开内容单一真源
 
-这时不要只改 workflow，要先创建 Pages 站点：
+### 3. 根目录说明文件会被 Quartz 误发出去
 
-```powershell
-gh api -X POST repos/<owner>/<site_repo>/pages -f build_type=workflow -f source[branch]=main -f source[path]=/
-```
+由于 Quartz 直接读取内容仓目录，像 `README.md`、`AGENTS.md` 这类仓库说明文件也可能被识别为页面。
 
-### 5. Linux runner 上可能缺少 Rollup 原生包
+当前已通过 `quartz.config.ts` 中的 `ignorePatterns` 排除：
 
-如果 Actions 日志里出现：
+- `**/README.md`
+- `**/AGENTS.md`
 
-```text
-Cannot find module @rollup/rollup-linux-x64-gnu
-```
+### 4. 旧文章里的数学写法会产生 KaTeX 告警
 
-就在 workflow 里补：
+当前旧文中存在一批“中文字符写在数学模式里”的历史写法。
 
-```yaml
-- name: Install dependencies
-  run: npm install
+这不会阻塞构建，但会污染日志。
 
-- name: Install Linux Rollup runtime
-  run: npm install --no-save @rollup/rollup-linux-x64-gnu
-```
+当前已将 KaTeX 严格模式降为 `ignore`，保证迁移期先上线；后续可以在内容仓里分批清理。
 
 ## 日常验证命令
 
-```powershell
+```bash
 gh run list --repo skyswordx/eediy_publish_site --limit 3
 gh api repos/skyswordx/eediy_publish_site/pages
 curl.exe -I https://www.circlemoon.top/
@@ -97,17 +83,26 @@ curl.exe -L https://www.circlemoon.top/
 
 重点确认：
 
-- 最新部署任务为 `success`
+- 最新 workflow 为 `success`
 - `build_type` 为 `workflow`
 - `cname` 为 `www.circlemoon.top`
-- 首页返回的是新 VitePress 站点，而不是旧 Hexo 内容
+- 返回内容来自 Quartz 新站点，而不是旧 Hexo / VitePress 残留
 
-## 变更后记得同步更新
+## 本地验证命令
 
-只要以下任一事实发生变化，就要同步更新本文档与相关说明：
+如果本机系统 Node 不满足要求，可用便携版 Node：
 
-- GitHub 认证方式
-- 远程仓库 owner / repo 名称
-- Pages 发布模式
-- 自定义域名绑定
-- CI 构建依赖或补丁
+```powershell
+& "D:/repo/_tmp_node_v22_20_0/node-v22.20.0-win-x64/npm.cmd" install
+& "D:/repo/_tmp_node_v22_20_0/node-v22.20.0-win-x64/npm.cmd" run build
+& "D:/repo/_tmp_node_v22_20_0/node-v22.20.0-win-x64/npm.cmd" run check
+```
+
+## 发生这些变化时，记得同步更新本文
+
+- GitHub 认证方式变化
+- Pages 发布模式变化
+- 自定义域名变化
+- Quartz 主版本变化
+- 内容目录解析规则变化
+- 公开内容仓 owner / repo 变化
