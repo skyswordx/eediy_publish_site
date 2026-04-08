@@ -12,7 +12,8 @@ if (fs.existsSync(localVitepress)) {
 
 const candidates = [
   path.resolve(root, '../rl-notes/node_modules'),
-  path.resolve(root, '../../rl-notes/node_modules')
+  path.resolve(root, '../../rl-notes/node_modules'),
+  path.resolve(root, '../../../rl-notes/node_modules')
 ]
 
 const externalNodeModules = candidates.find((dir) =>
