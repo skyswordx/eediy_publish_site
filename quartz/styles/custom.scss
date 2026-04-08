@@ -11,9 +11,7 @@ article.home_hero {
     margin: 1rem 0 1.75rem;
     border: 1px solid var(--lightgray);
     border-radius: 24px;
-    background:
-      radial-gradient(circle at top right, rgba(189, 125, 58, 0.18), transparent 32%),
-      linear-gradient(135deg, rgba(47, 107, 98, 0.1), transparent 55%), var(--light);
+    background: var(--light);
     box-shadow: 0 18px 48px rgba(31, 26, 20, 0.08);
   }
 
@@ -52,15 +50,16 @@ article.home_hero {
     gap: 0.75rem;
     margin-top: 1.25rem;
 
-    a {
+    .home-hero-link {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 92px;
+      gap: 0.55rem;
+      min-width: 110px;
       padding: 0.6rem 0.95rem;
       border-radius: 999px;
       border: 1px solid var(--lightgray);
-      background: rgba(255, 250, 241, 0.9);
+      background: rgba(255, 250, 241, 0.95);
       color: var(--dark);
       font-weight: 600;
       text-decoration: none;
@@ -74,6 +73,24 @@ article.home_hero {
         border-color: var(--secondary);
         background: var(--highlight);
       }
+    }
+
+    .home-hero-link-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1rem;
+      height: 1rem;
+      color: var(--secondary);
+
+      svg {
+        width: 1rem;
+        height: 1rem;
+      }
+    }
+
+    .home-hero-link-text {
+      line-height: 1;
     }
   }
 
@@ -146,7 +163,7 @@ article.home_hero {
       grid-template-columns: 1fr;
     }
 
-    .home-hero-links a {
+    .home-hero-links .home-hero-link {
       min-width: 0;
       flex: 1 1 calc(50% - 0.75rem);
     }
