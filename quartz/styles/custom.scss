@@ -1,3 +1,154 @@
 @use "./base.scss";
+@use "./variables.scss" as *;
 
-// put your custom CSS here!
+article.home_hero {
+  .home-hero-card {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 2rem;
+    align-items: center;
+    padding: 1.75rem;
+    margin: 1rem 0 1.75rem;
+    border: 1px solid var(--lightgray);
+    border-radius: 24px;
+    background:
+      radial-gradient(circle at top right, rgba(189, 125, 58, 0.18), transparent 32%),
+      linear-gradient(135deg, rgba(47, 107, 98, 0.1), transparent 55%), var(--light);
+    box-shadow: 0 18px 48px rgba(31, 26, 20, 0.08);
+  }
+
+  .home-hero-avatar {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 28px;
+    border: 3px solid var(--light);
+    box-shadow: 0 12px 32px rgba(31, 26, 20, 0.16);
+  }
+
+  .home-hero-copy {
+    min-width: 0;
+  }
+
+  .home-hero-kicker {
+    margin: 0 0 0.5rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--secondary);
+    font-weight: 700;
+  }
+
+  .home-hero-lead {
+    margin: 0;
+    font-size: 1.12rem;
+    line-height: 1.8;
+    color: var(--dark);
+  }
+
+  .home-hero-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 92px;
+      padding: 0.6rem 0.95rem;
+      border-radius: 999px;
+      border: 1px solid var(--lightgray);
+      background: rgba(255, 250, 241, 0.9);
+      color: var(--dark);
+      font-weight: 600;
+      text-decoration: none;
+      transition:
+        transform 0.18s ease,
+        border-color 0.18s ease,
+        background 0.18s ease;
+
+      &:hover {
+        transform: translateY(-1px);
+        border-color: var(--secondary);
+        background: var(--highlight);
+      }
+    }
+  }
+
+  .home-entry-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0 1rem;
+  }
+
+  .home-entry-card {
+    display: block;
+    padding: 1.25rem;
+    border: 1px solid var(--lightgray);
+    border-radius: 22px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.5), transparent), var(--light);
+    text-decoration: none;
+    transition:
+      transform 0.18s ease,
+      border-color 0.18s ease,
+      box-shadow 0.18s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      border-color: var(--secondary);
+      box-shadow: 0 12px 28px rgba(31, 26, 20, 0.08);
+    }
+
+    strong {
+      display: block;
+      margin: 0.2rem 0 0.45rem;
+      color: var(--dark);
+      font-size: 1.05rem;
+    }
+
+    p {
+      margin: 0;
+      color: var(--darkgray);
+    }
+  }
+
+  .home-entry-label {
+    display: inline-block;
+    margin-bottom: 0.2rem;
+    color: var(--tertiary);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  @media all and ($mobile) {
+    .home-hero-card {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      padding: 1.2rem;
+    }
+
+    .home-hero-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 22px;
+    }
+
+    .home-hero-lead {
+      font-size: 1rem;
+    }
+
+    .home-entry-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .home-hero-links a {
+      min-width: 0;
+      flex: 1 1 calc(50% - 0.75rem);
+    }
+  }
+}
