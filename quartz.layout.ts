@@ -36,7 +36,20 @@ export const defaultContentPageLayout: PageLayout = {
         { Component: Component.ReaderMode() },
       ],
     }),
-    Component.Explorer(),
+    Component.Explorer({
+      filterFn: (node) => {
+        if (node.slugSegment === "tags") return false
+        const hiddenPrefixes = [
+          "blog/legacy/college-lessons",
+          "blog/legacy/data-algo",
+          "blog/legacy/draft",
+          "blog/legacy/robotics",
+        ]
+        return !hiddenPrefixes.some(
+          (prefix) => node.slug === `${prefix}/index` || node.slug.startsWith(`${prefix}/`),
+        )
+      },
+    }),
   ],
   right: [
     Component.Graph(),
@@ -59,7 +72,20 @@ export const defaultListPageLayout: PageLayout = {
         { Component: Component.Darkmode() },
       ],
     }),
-    Component.Explorer(),
+    Component.Explorer({
+      filterFn: (node) => {
+        if (node.slugSegment === "tags") return false
+        const hiddenPrefixes = [
+          "blog/legacy/college-lessons",
+          "blog/legacy/data-algo",
+          "blog/legacy/draft",
+          "blog/legacy/robotics",
+        ]
+        return !hiddenPrefixes.some(
+          (prefix) => node.slug === `${prefix}/index` || node.slug.startsWith(`${prefix}/`),
+        )
+      },
+    }),
   ],
   right: [],
 }
