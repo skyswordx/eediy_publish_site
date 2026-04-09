@@ -24,6 +24,24 @@ const defaultOptions: FolderContentOptions = {
   showSubfolders: true,
 }
 
+const legacy_blog_hidden_prefixes = [
+  "blog/legacy/college-lessons",
+  "blog/legacy/data-algo",
+  "blog/legacy/draft",
+  "blog/legacy/robotics",
+]
+
+function isHiddenLegacyEntry(currentSlug: string, pageSlug?: string) {
+  if (currentSlug !== "blog/legacy/index" || !pageSlug) {
+    return false
+  }
+
+  return legacy_blog_hidden_prefixes.some(
+    (prefix) =>
+      pageSlug === prefix || pageSlug === `${prefix}/index` || pageSlug.startsWith(`${prefix}/`),
+  )
+}
+
 export default ((opts?: Partial<FolderContentOptions>) => {
   const options: FolderContentOptions = { ...defaultOptions, ...opts }
 
@@ -88,12 +106,15 @@ export default ((opts?: Partial<FolderContentOptions>) => {
           }
         })
         .filter((page) => page !== undefined) ?? []
+    const visiblePagesInFolder = allPagesInFolder.filter(
+      (page) => !isHiddenLegacyEntry(fileData.slug!, page.slug),
+    )
     const cssClasses: string[] = fileData.frontmatter?.cssclasses ?? []
     const classes = cssClasses.join(" ")
     const listProps = {
       ...props,
       sort: options.sort,
-      allFiles: allPagesInFolder,
+      allFiles: visiblePagesInFolder,
     }
 
     const content = (
@@ -109,7 +130,7 @@ export default ((opts?: Partial<FolderContentOptions>) => {
           {options.showFolderCount && (
             <p>
               {i18n(cfg.locale).pages.folderContent.itemsUnderFolder({
-                count: allPagesInFolder.length,
+                count: visiblePagesInFolder.length,
               })}
             </p>
           )}
