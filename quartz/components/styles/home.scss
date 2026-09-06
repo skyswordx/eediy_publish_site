@@ -1,3 +1,6 @@
+html:has(body[data-slug="index"]) {
+  scroll-padding-top: 0;
+}
 body[data-slug="index"] {
   #quartz-root.page {
     max-width: none;
@@ -143,8 +146,13 @@ body[data-slug="index"] {
     color: #fff;
     margin: 0;
   }
-  .home-quote-break {
-    display: none;
+  .home-quote {
+    min-height: 1.8em;
+  }
+  .home-cursor {
+    display: inline-block;
+    margin-left: 3px;
+    animation: home-blink 0.8s step-end infinite;
   }
   .home-scroll {
     position: absolute;
@@ -170,7 +178,7 @@ body[data-slug="index"] {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 260px;
     gap: 80px;
-    scroll-margin-top: 24px;
+    scroll-margin-top: 0;
   }
   .home-section-heading {
     display: flex;
@@ -196,9 +204,26 @@ body[data-slug="index"] {
   .home-post-meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 18px;
+    gap: 8px 14px;
     font-size: 12px;
-    color: var(--gray);
+    color: var(--darkgray);
+    margin-bottom: 14px;
+    > span {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    > span + span::before {
+      content: "";
+      height: 12px;
+      border-left: 1px solid var(--gray);
+      margin-right: 9px;
+    }
+    svg {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+    }
   }
   .home-post h3 {
     margin: 12px 0;
@@ -289,8 +314,10 @@ body[data-slug="index"] {
     .home-cover {
       min-height: 520px;
     }
-    .home-quote-break {
-      display: block;
+    .home-quote {
+      min-height: 3.6em;
+      max-width: 340px;
+      margin: 0 auto;
     }
     .home-cover-copy {
       top: 39%;
@@ -298,6 +325,11 @@ body[data-slug="index"] {
     .home-post h3 {
       font-size: 21px;
     }
+  }
+}
+@keyframes home-blink {
+  50% {
+    opacity: 0;
   }
 }
 @keyframes home-enter {
