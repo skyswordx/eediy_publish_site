@@ -86,6 +86,13 @@ async function _navigate(url: URL, isBack: boolean = false) {
   cleanupFns.clear()
 
   const html = p.parseFromString(contents, "text/html")
+  // Persistent styles and scripts must belong to the same deployment as the page.
+  const currentBuild = document.querySelector('meta[name="quartz-build"]')?.getAttribute("content")
+  const nextBuild = html.querySelector('meta[name="quartz-build"]')?.getAttribute("content")
+  if (currentBuild !== nextBuild) {
+    window.location.assign(url)
+    return
+  }
   normalizeRelativeURLs(html, url)
 
   let title = html.querySelector("title")?.textContent

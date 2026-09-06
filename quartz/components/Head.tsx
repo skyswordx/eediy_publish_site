@@ -40,6 +40,7 @@ export default (() => {
       <head>
         <title>{title}</title>
         <meta charSet="utf-8" />
+        <meta name="quartz-build" content={ctx.buildId} />
         {fileData.slug === "index" && (
           <>
             <link rel="preload" as="image" href="/static/interstellar-hero.webp" />
