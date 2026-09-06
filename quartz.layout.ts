@@ -58,6 +58,15 @@ export const defaultContentPageLayout: PageLayout = {
   ],
 }
 
+for (const region of ["beforeBody", "left", "right"] as const) {
+  defaultContentPageLayout[region] = defaultContentPageLayout[region].map((component) =>
+    Component.ConditionalRender({
+      component,
+      condition: (page) => page.fileData.slug !== "index",
+    }),
+  )
+}
+
 export const defaultListPageLayout: PageLayout = {
   beforeBody: [Component.Breadcrumbs(), Component.ArticleTitle(), Component.ContentMeta()],
   left: [

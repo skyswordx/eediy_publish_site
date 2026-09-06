@@ -1,5 +1,6 @@
 import { QuartzConfig } from "./quartz/cfg"
 import * as Plugin from "./quartz/plugins"
+import Home from "./quartz/components/pages/Home"
 
 const config: QuartzConfig = {
   configuration: {
@@ -76,7 +77,7 @@ const config: QuartzConfig = {
     emitters: [
       Plugin.AliasRedirects(),
       Plugin.ComponentResources(),
-      Plugin.ContentPage(),
+      Plugin.ContentPage({ pageBody: Home() }),
       Plugin.FolderPage(),
       Plugin.TagPage(),
       Plugin.ContentIndex({

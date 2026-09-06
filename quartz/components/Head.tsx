@@ -40,6 +40,15 @@ export default (() => {
       <head>
         <title>{title}</title>
         <meta charSet="utf-8" />
+        {fileData.slug === "index" && (
+          <>
+            <link rel="preload" as="image" href="/static/interstellar-hero.webp" />
+            <link
+              rel="stylesheet"
+              href="https://fonts.googleapis.com/css2?family=Righteous&family=Tauri&display=swap"
+            />
+          </>
+        )}
         {cfg.theme.cdnCaching && cfg.theme.fontOrigin === "googleFonts" && (
           <>
             <link rel="preconnect" href="https://fonts.googleapis.com" />
