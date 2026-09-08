@@ -42,14 +42,12 @@ export default (() => {
         <meta charSet="utf-8" />
         <meta name="quartz-build" content={ctx.buildId} />
         {fileData.slug === "index" && (
-          <>
-            <link rel="preload" as="image" href="/static/interstellar-hero.webp" />
-            <link
-              rel="stylesheet"
-              href="https://fonts.googleapis.com/css2?family=Righteous&family=Tauri&display=swap"
-            />
-          </>
+          <link rel="preload" as="image" href="/static/interstellar-hero.webp" />
         )}
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap"
+        />
         {cfg.theme.cdnCaching && cfg.theme.fontOrigin === "googleFonts" && (
           <>
             <link rel="preconnect" href="https://fonts.googleapis.com" />
