@@ -14,13 +14,12 @@ const config: QuartzConfig = {
     ignorePatterns: ["private", "templates", ".obsidian", "**/README.md", "**/AGENTS.md"],
     defaultDateType: "modified",
     theme: {
-      fontOrigin: "local",
+      fontOrigin: "googleFonts",
       cdnCaching: true,
       typography: {
-        // OG images need a downloadable font; custom.scss supplies the browser's Butterfly stack.
-        title: "Noto Sans SC",
-        header: "Noto Sans SC",
-        body: "Noto Sans SC",
+        title: { name: "Noto Sans SC", weights: [500, 700] },
+        header: { name: "Noto Sans SC", weights: [400, 500, 600, 700] },
+        body: { name: "Noto Sans SC", weights: [400, 500, 600, 700], includeItalic: false },
         code: "JetBrains Mono",
       },
       colors: {

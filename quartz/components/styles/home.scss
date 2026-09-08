@@ -79,7 +79,7 @@ body[data-slug="index"] {
   }
   .home-nav a {
     color: #fff;
-    font-weight: 400;
+    font-weight: 500;
   }
   .home-nav .home-brand {
     font-family: var(--titleFont);
@@ -225,7 +225,7 @@ body[data-slug="index"] {
   }
   .home-post h3 {
     margin: 12px 0;
-    font: 400 22px/1.4 var(--headerFont);
+    font: 700 22px/1.4 var(--headerFont);
   }
   .home-post h3 a {
     color: var(--dark);
@@ -255,7 +255,7 @@ body[data-slug="index"] {
     object-fit: cover;
   }
   .home-profile h2 {
-    font: 500 22px/1.5 var(--headerFont);
+    font: 700 22px/1.5 var(--headerFont);
     margin: 20px 0 12px;
   }
   .home-profile p {
