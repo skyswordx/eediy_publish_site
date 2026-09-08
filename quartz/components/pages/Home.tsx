@@ -6,6 +6,7 @@ import { Date } from "../Date"
 import { resolveRelative } from "../../util/path"
 import style from "../styles/home.scss"
 import { concatenateResources } from "../../util/resources"
+import { siteMetadata } from "../../siteMetadata"
 // @ts-ignore
 import homeScript from "../scripts/home.inline"
 
@@ -132,7 +133,7 @@ export default (() => {
               loading="lazy"
             />
             <h2>circLΣMoon</h2>
-            <p>课程笔记、机器人、自动驾驶、强化学习，还有一些值得留下来的长期写作。</p>
+            <p>{siteMetadata.description}</p>
             <a href="/blog/">走进我的博客 ↗</a>
             <div class="home-profile-links">
               <a href="https://github.com/skyswordx">GitHub</a>

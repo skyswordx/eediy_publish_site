@@ -1,6 +1,7 @@
 import { QuartzConfig } from "./quartz/cfg"
 import * as Plugin from "./quartz/plugins"
 import Home from "./quartz/components/pages/Home"
+import { Discovery } from "./quartz/plugins/emitters/discovery"
 
 const config: QuartzConfig = {
   configuration: {
@@ -87,6 +88,7 @@ const config: QuartzConfig = {
       Plugin.Assets(),
       Plugin.Static(),
       Plugin.CNAME(),
+      Discovery(),
       Plugin.Favicon(),
       Plugin.NotFoundPage(),
       Plugin.CustomOgImages(),

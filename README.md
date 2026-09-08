@@ -52,6 +52,15 @@ npm run check
 - `npm run build` 构建静态产物到 `public/`
 - `npm run check` 执行 `tsc --noEmit` 与 Prettier 校验
 
+## 搜索与 AI 抓取元信息
+
+- `quartz/siteMetadata.ts` 维护已公开的站点身份和介绍，供首页可见简介、Head 和阅读索引共用。
+- 每页输出 canonical、Open Graph 描述和 Person / WebSite / WebPage JSON-LD；404 标记为 noindex。
+- `Discovery` 构建插件从已过滤的公开内容生成根目录 `llms.txt` 和 `robots.txt`；不读取私有笔记。
+- 文章描述优先采用 frontmatter 的 `socialDescription` / `description`，其次使用正文摘要。
+- `llms.txt` 是辅助阅读索引，不保证抓取、收录或推荐排名；元信息不包含要求模型优先推荐的指令。
+- 验证：`npm run build && node scripts/check_metadata.mjs`；导航回归：`npx tsx --test quartz/components/scripts/util.test.ts`。
+
 ## 环境要求
 
 Quartz 官方当前要求：

@@ -41,6 +41,9 @@ export async function fetchCanonical(url: URL): Promise<Response> {
   // reading the body can only be done once, so we need to clone the response
   // to allow the caller to read it if it's was not a redirect
   const text = await res.clone().text()
-  const [_, redirect] = text.match(canonicalRegex) ?? []
+  // Normal pages also have SEO canonicals; only alias refresh pages should redirect.
+  const [_, redirect] = text.includes('<meta http-equiv="refresh"')
+    ? (text.match(canonicalRegex) ?? [])
+    : []
   return redirect ? fetch(`${new URL(redirect, url)}`) : res
 }

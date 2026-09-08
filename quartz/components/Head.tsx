@@ -1,10 +1,11 @@
 import { i18n } from "../i18n"
-import { FullSlug, getFileExtension, joinSegments, pathToRoot } from "../util/path"
+import { FullSlug, getFileExtension, joinSegments, pathToRoot, simplifySlug } from "../util/path"
 import { CSSResourceToStyleElement, JSResourceToScriptElement } from "../util/resources"
 import { googleFontHref, googleFontSubsetHref } from "../util/theme"
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 import { unescapeHTML } from "../util/escape"
 import { CustomOgImagesEmitterName } from "../plugins/emitters/ogImage"
+import { siteMetadata } from "../siteMetadata"
 export default (() => {
   const Head: QuartzComponent = ({
     cfg,
@@ -16,9 +17,14 @@ export default (() => {
     const title =
       (fileData.frontmatter?.title ?? i18n(cfg.locale).propertyDefaults.title) + titleSuffix
     const description =
-      fileData.frontmatter?.socialDescription ??
-      fileData.frontmatter?.description ??
-      unescapeHTML(fileData.description?.trim() ?? i18n(cfg.locale).propertyDefaults.description)
+      fileData.slug === "index"
+        ? siteMetadata.description
+        : unescapeHTML(
+            fileData.frontmatter?.socialDescription ??
+              fileData.frontmatter?.description ??
+              fileData.description?.trim() ??
+              i18n(cfg.locale).propertyDefaults.description,
+          )
 
     const { css, js, additionalHead } = externalResources
 
@@ -28,8 +34,39 @@ export default (() => {
     const iconPath = joinSegments(baseDir, "static/icon.png")
 
     // Url of current page
-    const socialUrl =
-      fileData.slug === "404" ? url.toString() : joinSegments(url.toString(), fileData.slug!)
+    const socialUrl = encodeURI(joinSegments(url.toString(), simplifySlug(fileData.slug!)))
+    const siteUrl = url.toString().replace(/\/?$/, "/")
+    const structuredData = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": `${siteUrl}#author`,
+          name: siteMetadata.author,
+          url: siteUrl,
+          sameAs: [siteMetadata.github],
+        },
+        {
+          "@type": "WebSite",
+          "@id": `${siteUrl}#website`,
+          url: siteUrl,
+          name: cfg.pageTitle,
+          description: siteMetadata.description,
+          inLanguage: cfg.locale,
+          creator: { "@id": `${siteUrl}#author` },
+          keywords: siteMetadata.topics,
+        },
+        {
+          "@type": "WebPage",
+          "@id": `${socialUrl}#webpage`,
+          url: socialUrl,
+          name: title,
+          description,
+          inLanguage: cfg.locale,
+          isPartOf: { "@id": `${siteUrl}#website` },
+        },
+      ],
+    }
 
     const usesCustomOgImage = ctx.cfg.plugins.emitters.some(
       (e) => e.name === CustomOgImagesEmitterName,
@@ -57,7 +94,14 @@ export default (() => {
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <meta name="og:site_name" content={cfg.pageTitle}></meta>
+        <meta property="og:site_name" content={cfg.pageTitle} />
+        <meta property="og:locale" content={cfg.locale.replace("-", "_")} />
+        <meta
+          name="robots"
+          content={
+            fileData.slug === "404" ? "noindex, follow" : "index, follow, max-image-preview:large"
+          }
+        />
         <meta property="og:title" content={title} />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
@@ -80,6 +124,29 @@ export default (() => {
 
         {cfg.baseUrl && (
           <>
+            {fileData.slug !== "404" && (
+              <>
+                <link rel="canonical" href={socialUrl} />
+                <script
+                  type="application/ld+json"
+                  dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+                  }}
+                />
+              </>
+            )}
+            <link
+              rel="alternate"
+              type="application/rss+xml"
+              title={cfg.pageTitle}
+              href={`${siteUrl}index.xml`}
+            />
+            <link
+              rel="alternate"
+              type="text/plain"
+              title="Site reading index for language models"
+              href={`${siteUrl}llms.txt`}
+            />
             <meta property="twitter:domain" content={cfg.baseUrl}></meta>
             <meta property="og:url" content={socialUrl}></meta>
             <meta property="twitter:url" content={socialUrl}></meta>
