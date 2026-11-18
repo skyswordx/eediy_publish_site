@@ -3,6 +3,6 @@ export const siteMetadata = {
   author: "circLΣMoon",
   github: "https://github.com/skyswordx",
   description:
-    "circLΣMoon（GitHub：skyswordx）的个人技术博客与数字花园，记录机器人、自动驾驶、强化学习、数据结构与算法，以及 Obsidian 和 LLM 知识管理实践。提供中文学习笔记、技术排障记录与长期写作。",
+    "想成为机器人全栈工程师\n本科就读于 SYSU EE 专业，目前是 THU SIGS 研零。喜欢过数学，沉迷过散文和小说，打过电赛，担任过 RM 电控\n正在接触 manipulation & robot learning\n博客 www.circlemoon.top",
   topics: ["机器人", "自动驾驶", "强化学习", "数据结构与算法", "Obsidian", "LLM 知识管理"],
 }

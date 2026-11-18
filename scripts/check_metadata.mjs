@@ -45,7 +45,12 @@ for (const filename of files.filter((file) => file.endsWith(".html"))) {
   assert.match(html, /property="og:site_name"/)
   assert.match(html, /rel="alternate" type="text\/plain"/)
   if (filename === "index.html") {
-    assert.ok(html.includes(`<p>${page.description}</p>`), "Visible profile matches metadata")
+    const visibleDescription = page.description
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+    assert.ok(html.includes(`<p>${visibleDescription}</p>`), "Visible profile matches metadata")
   }
   checked++
 }
