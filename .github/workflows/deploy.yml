@@ -17,21 +17,10 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      PUBLIC_CONTENT_DIR: ./_external/eediy_public_content
     steps:
       - name: Checkout publish_site
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-
-      - name: Checkout public_content
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ vars.PUBLIC_CONTENT_REPOSITORY != '' && vars.PUBLIC_CONTENT_REPOSITORY || format('{0}/eediy_public_content', github.repository_owner) }}
-          token: ${{ secrets.PUBLIC_CONTENT_READ_TOKEN != '' && secrets.PUBLIC_CONTENT_READ_TOKEN || github.token }}
-          ref: main
-          path: _external/eediy_public_content
           fetch-depth: 0
 
       - name: Setup Node

@@ -1,14 +1,8 @@
 import path from "node:path"
 import { spawnSync } from "node:child_process"
-import { resolvePublicContentDir } from "./sync_public_content.mjs"
 
 const root = process.cwd()
-const sourceDir = resolvePublicContentDir(root)
-
-if (!sourceDir) {
-  console.error("未找到 eediy_public_content，请检查目录结构或 PUBLIC_CONTENT_DIR。")
-  process.exit(1)
-}
+const sourceDir = path.resolve(root, "content")
 
 const quartzCli = path.resolve(root, "quartz/bootstrap-cli.mjs")
 const args = [quartzCli, "build", "-d", sourceDir, ...process.argv.slice(2)]

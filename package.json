@@ -1,6 +1,6 @@
 {
   "name": "eediy_publish_site",
-  "description": "Quartz render and deploy site for eediy_public_content",
+  "description": "Public articles, Quartz theme and publishing workflow for circLΣMoon",
   "private": true,
   "version": "0.2.0",
   "type": "module",
@@ -12,7 +12,7 @@
   },
   "scripts": {
     "quartz": "./quartz/bootstrap-cli.mjs",
-    "content:dir": "node ./scripts/sync_public_content.mjs",
+    "content:dir": "node -p \"require('node:path').resolve('content')\"",
     "dev": "node ./scripts/run_quartz.mjs --serve",
     "build": "node ./scripts/run_quartz.mjs",
     "preview": "node ./scripts/run_quartz.mjs --serve",

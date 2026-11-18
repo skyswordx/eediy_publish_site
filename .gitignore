@@ -1,9 +1,5 @@
 node_modules/
 public/
 .quartz-cache/
-content/*
-!content/.gitkeep
-_external/
-docs/
 *.log
 tsconfig.tsbuildinfo

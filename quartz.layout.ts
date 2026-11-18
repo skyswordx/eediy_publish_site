@@ -8,7 +8,7 @@ export const sharedPageComponents: SharedLayout = {
   footer: Component.Footer({
     links: {
       GitHub: "https://github.com/skyswordx",
-      Public_Content: "https://github.com/skyswordx/eediy_public_content",
+      Public_Content: "https://github.com/skyswordx/eediy_publish_site/tree/main/content",
     },
   }),
 }
